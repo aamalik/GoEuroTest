@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.cert.X509Certificate;
@@ -57,44 +58,47 @@ public class TestSSL {
             }
         };
 
-        // Install the all-trusting host verifier
-        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-        
-    	System.out.println("The STRING to be entered");
- 	   	Scanner scan = new Scanner(System.in);
-		String str = scan.nextLine();
-        
-		String UrlName = "https://api.goeuro.com/api/v1/suggest/position/en/name/";
-		String UrlString = UrlName + str;
-		System.out.println("So the url is " + UrlString);
-		URL url = new URL(UrlString);
-        URLConnection con = url.openConnection();
-        final Reader reader = new InputStreamReader(con.getInputStream());
-        final BufferedReader br = new BufferedReader(reader);        
-        String line = "";
-        
-        
         try {
-        
-	        while ((line = br.readLine()) != null) {
-	        	   JSONObject output= new JSONObject(line);
-	        	   JSONArray docs = output.getJSONArray("results");
-	
-	        	   for(int i=0; i<docs.length();i++){
-	        	       JSONObject geo_pos =  (JSONObject)(docs.getJSONObject(i).getJSONObject("geo_position"));
-	        	       docs.getJSONObject(i).put("latitude", geo_pos.get("latitude"));
-	        	       docs.getJSONObject(i).put("longitude", geo_pos.get("longitude"));
-	        	       docs.getJSONObject(i).remove("geo_position");
-	        	   }       
-	        	   
-	        	   File file = new File("/home/asfandyar/Desktop/GoEuro.csv");
-	        	   String csv = CDL.toString(docs);
-	        	   FileUtils.writeStringToFile(file, csv);
-	        	   System.out.println("Worked ! Check the GoEuro.csv");
+		        // Install the all-trusting host verifier
+		        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+		        
+		    	System.out.println("The STRING to be entered");
+		 	   	Scanner scan = new Scanner(System.in);
+				String str = scan.nextLine();
+		        
+				String UrlName = "https://api.goeuro.com/api/v1/suggest/position/en/name/";
+				String UrlString = UrlName + str;
+				System.out.println("So the url is " + UrlString);
+				URL url = new URL(UrlString);
+		        URLConnection con = url.openConnection();
+		        final Reader reader = new InputStreamReader(con.getInputStream());
+		        final BufferedReader br = new BufferedReader(reader);        
+	 
+	        try {
+	        	String line = "";
+		        while ((line = br.readLine()) != null) {
+		        	   JSONObject output= new JSONObject(line);
+		        	   JSONArray docs = output.getJSONArray("results");
+		
+		        	   for(int i=0; i<docs.length();i++){
+		        	       JSONObject geo_pos =  (JSONObject)(docs.getJSONObject(i).getJSONObject("geo_position"));
+		        	       docs.getJSONObject(i).put("latitude", geo_pos.get("latitude"));
+		        	       docs.getJSONObject(i).put("longitude", geo_pos.get("longitude"));
+		        	       docs.getJSONObject(i).remove("geo_position");
+		        	   }       
+		        	   
+		        	   File file = new File("/home/asfandyar/Desktop/Mew.csv");
+		        	   String csv = CDL.toString(docs);
+		        	   FileUtils.writeStringToFile(file, csv);
+		        	   System.out.println("Worked ! Check the GoEuro.csv");
+		        }
+		        br.close();
+	        }catch (IOException e) {
+	           System.err.println("Problem writing to the file GoEuro.csv");
 	        }
-	        br.close();
-        }catch (IOException e) {
-           System.err.println("Problem writing to the file GoEuro.csv");
         }
+        catch (MalformedURLException e) {
+    		e.printStackTrace();
+        }        		        	        
     } // End of main 
 } // End of the class
