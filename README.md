@@ -16,8 +16,11 @@ GoEuroTest.jar is located. The content of the file is something as follows:
 (Following is just a stub)
 
 _type   longitude   latitude
+
 Position    null    null
+
 Position    null    null
+
 
 
 =============
