@@ -62,9 +62,7 @@ public class TestSSL {
 		        // Install the all-trusting host verifier
 		        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
 		        
-		    	System.out.println("The STRING to be entered");
-		 	   	Scanner scan = new Scanner(System.in);
-				String str = scan.nextLine();
+				String str = args[0];
 		        
 				String UrlName = "https://api.goeuro.com/api/v1/suggest/position/en/name/";
 				String UrlString = UrlName + str;
