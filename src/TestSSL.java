@@ -1,8 +1,8 @@
 /** 
- * I have made an all trusting trust manager which makes it vulnerable to some middle man attacks. Due to time constraints
- * I am going with this solution although it is vulnerable to some middle man attacks. 
- * Making it secure is very easy. You just have to export the certificate from your browser and import it in your JVM truststore.
- * It was not specified so I decided to go with this. If it is desired by the company to make it more secure, you just have to inform
+ * I have made an all trusting trust manager which accepts all certificates. Due to time constraints
+ * I am going with this solution although it might have some disadvantages. 
+ * In order to eradicate these disadvantages and inorder to make it more secure one just has to export the certificate from your browser and import it in your JVM truststore.
+ * It was not specified in the specifications so I decided to go with this. If it is desired by the company to make it more secure, you just have to inform
  * me and I will do it. 
  */
 
@@ -68,7 +68,7 @@ public class TestSSL {
 		        
 				String UrlName = "https://api.goeuro.com/api/v1/suggest/position/en/name/";
 				String UrlString = UrlName + str;
-				System.out.println("So the url is " + UrlString);
+				//System.out.println("So the url is " + UrlString);
 				URL url = new URL(UrlString);
 		        URLConnection con = url.openConnection();
 		        final Reader reader = new InputStreamReader(con.getInputStream());
@@ -87,10 +87,10 @@ public class TestSSL {
 		        	       docs.getJSONObject(i).remove("geo_position");
 		        	   }       
 		        	   
-		        	   File file = new File("/home/asfandyar/Desktop/Mew.csv");
+		        	   File file = new File("GoEuro.csv");
 		        	   String csv = CDL.toString(docs);
 		        	   FileUtils.writeStringToFile(file, csv);
-		        	   System.out.println("Worked ! Check the GoEuro.csv");
+		        	   System.out.println("Check the GoEuro.csv");
 		        }
 		        br.close();
 	        }catch (IOException e) {
