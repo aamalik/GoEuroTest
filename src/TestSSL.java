@@ -59,36 +59,34 @@ public class TestSSL {
         };
 
         try {
-		        // Install the all-trusting host verifier
-		        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-		        
-				String str = args[0];
-		        
-				String UrlName = "https://api.goeuro.com/api/v1/suggest/position/en/name/";
-				String UrlString = UrlName + str;
-				//System.out.println("So the url is " + UrlString);
-				URL url = new URL(UrlString);
-		        URLConnection con = url.openConnection();
-		        final Reader reader = new InputStreamReader(con.getInputStream());
-		        final BufferedReader br = new BufferedReader(reader);        
+	        // Install the all-trusting host verifier
+	        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+		String str = args[0];
+		String UrlName = "https://api.goeuro.com/api/v1/suggest/position/en/name/";
+		String UrlString = UrlName + str;
+		//System.out.println("So the url is " + UrlString);
+		URL url = new URL(UrlString);
+	        URLConnection con = url.openConnection();
+	        final Reader reader = new InputStreamReader(con.getInputStream());
+	        final BufferedReader br = new BufferedReader(reader);        
 	 
 	        try {
 	        	String line = "";
 		        while ((line = br.readLine()) != null) {
-		        	   JSONObject output= new JSONObject(line);
-		        	   JSONArray docs = output.getJSONArray("results");
-		
-		        	   for(int i=0; i<docs.length();i++){
-		        	       JSONObject geo_pos =  (JSONObject)(docs.getJSONObject(i).getJSONObject("geo_position"));
-		        	       docs.getJSONObject(i).put("latitude", geo_pos.get("latitude"));
-		        	       docs.getJSONObject(i).put("longitude", geo_pos.get("longitude"));
-		        	       docs.getJSONObject(i).remove("geo_position");
-		        	   }       
-		        	   
-		        	   File file = new File("GoEuro.csv");
-		        	   String csv = CDL.toString(docs);
-		        	   FileUtils.writeStringToFile(file, csv);
-		        	   System.out.println("Check the GoEuro.csv");
+	        	   JSONObject output= new JSONObject(line);
+	        	   JSONArray docs = output.getJSONArray("results");
+	
+	        	   for(int i=0; i<docs.length();i++){
+	        	       JSONObject geo_pos =  (JSONObject)(docs.getJSONObject(i).getJSONObject("geo_position"));
+	        	       docs.getJSONObject(i).put("latitude", geo_pos.get("latitude"));
+	        	       docs.getJSONObject(i).put("longitude", geo_pos.get("longitude"));
+	        	       docs.getJSONObject(i).remove("geo_position");
+	        	   }       
+	        	   
+	        	   File file = new File("GoEuro.csv");
+	        	   String csv = CDL.toString(docs);
+	        	   FileUtils.writeStringToFile(file, csv);
+	        	   System.out.println("Check the GoEuro.csv");
 		        }
 		        br.close();
 	        }catch (IOException e) {
